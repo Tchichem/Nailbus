@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prestations{% endblock %}
+
+{% block body %}
+<div>
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+    <section id="services" class="mt-5">
+        <h1 class="mb-4">Prestations</h1>
+
+        {% if services|length > 0 %}
+            <div class="row mt-4">
+                {% for service in services %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <img width="200px" height="200px" src="{{ asset('build/images/' ~ service.image) }}" alt="{{ service.name }}">
+                                <h5 class="card-title">{{ service.name|upper }}</h5>
+                                <p class="card-text">{{ service.description|slice(0, 100) }}...</p>
+                                <a href="{{ path('app_services_show', { id : service.id }) }}" class="btn mybtn">Voir</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning">Aucune prestation à afficher. Restez informés sur nos réseaux sociaux.</div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+
+<div class="container my-5">
+    <h2 class="mb-4">Votre panier</h2>
+
+    <div class="row col-md-8 mx-auto mt-5">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{message}}
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if cart_items["id"] is defined and cart_items["id"] is not empty %}
+    <div class="table-responsive">
+         <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Produit</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">Prix Unitaire</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in 0..(cart_items.id|length - 1) %}
+                    <tr>
+                        <td>{{ cart_items.name[i] }}</td>
+                        <td>
+                            <form method="post" action="{{path('app_modify_cart')}}" class="d-inline">
+                            <input type="hidden" value="{{cart_items.id[i]}}" name="idProduct" />
+                                <input type="number" name="quantity" value="{{ cart_items.quantity[i] }}" min="1" class="form-control form-control-sm d-inline-block w-50" />
+                                <button type="submit" class="btn btn-sm btn-primary">Modifier</button>
+                            </form>
+                        </td>
+                        <td>{{ cart_items.price[i] | number_format(2, ',', ' ') }} €</td>
+                        <td>{{ (cart_items.price[i] * cart_items.quantity[i]) | number_format(2, ',', ' ') }} €</td>
+                        <td>
+                            <a href="{{path('app_delete_cart', {idProduct : cart_items.id[i] })}}" class="btn btn-sm btn-danger">
+                                Supprimer
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+        <div class="d-flex justify-content-end">
+            <h4>Total : {{ total_amount | number_format(2, ',', ' ') }} €</h4>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-between">
+            <a href="{{ path('app_catalog') }}" class="btn btn-secondary">Continuer vos achats</a>
+            {% if app.user %}
+                <form method="post" action="{{ path('app_buy', { id : cart_items.id[0] }) }}" class="d-inline">
+                    <input type="hidden" name="total_amount" value="{{total_amount}}"/>
+                    <button type="submit" class="btn btn-success">Passer à la commande</button>
+                </form>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-secondary">Se connecter</a>
+            {% endif %}
+        </div>
+        
+        <div class="mt-4 d-flex justify-content-between">
+            <a href="{{ path('app_empty_cart') }}" class="btn btn-danger">Vider le panier</a>
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center">
+            Votre panier est vide.
+        </div>
+    {% endif %}
+</div>
+
+
+
+{% endblock %}

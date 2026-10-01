@@ -1,0 +1,184 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rendez-vous{% endblock %}
+
+{% block body %}
+
+    <style>
+
+        #calendar-holder {
+            background:white;
+            padding-top:1rem;
+            padding-bottom:1rem;
+        }
+
+    </style>
+
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales/fr.js"></script>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div id="calendar"></div>
+    </div>
+
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            locale: 'fr', 
+            timeZone: 'local', 
+            events: {{ appointments|raw }},
+            dateClick: function(info) {
+                {% if app.user %}
+                    let dateTime = new Date(info.dateStr);
+                    let formattedDateTime = dateTime.toISOString().slice(0, 16);
+                    document.querySelector('#appointment_startTime').value = formattedDateTime;
+
+                    var modalEl = document.getElementById('appointmentModal');
+                    var myModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    myModal.show();
+                {% else %}
+                    var loginModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('loginRequiredModal'));
+                    loginModal.show();
+
+                    // Fermeture automatique après 4 secondes
+                    setTimeout(() => {
+                        loginModal.hide();
+                    }, 4000);
+                {% endif %}
+
+            }
+
+        });
+
+        calendar.render();
+    });
+
+    </script>
+    <!-- Modal -->
+    <div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg"> {# Agrandir la modal #}
+        <div class="modal-content shadow-lg"> {# Ajouter un effet d'ombre #}
+          <div class="modal-header bg-danger text-white"> {# Couleur de l’en-tête #}
+            <h5 class="modal-title" id="appointmentModalLabel">
+              <i class="fas fa-calendar-plus"></i> Demander un rendez-vous
+            </h5>
+            <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="appointmentFormContainer">
+              {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  {{ form_row(form.startTime, {'attr': {'class': 'form-control'}, 'label': 'Date et heure de début'}) }}
+                </div>
+                <div class="col-md-6">
+                  {{ form_row(form.duration, {'attr': {'class': 'form-control'}, 'label': 'Durée (minutes)'}) }}
+                </div>
+              </div>
+
+              <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                  {{ form_row(form.clientName, {'attr': {'class': 'form-control'}, 'label': 'Nom et Prénom'}) }}
+                </div>
+                <div class="col-md-6">
+                  {{ form_row(form.clientEmail, {'attr': {'class': 'form-control'}, 'label': 'Email'}) }}
+                </div>
+              </div>
+
+              <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                  {{ form_row(form.clientPhone, {'attr': {'class': 'form-control'}, 'label': 'Téléphone'}) }}
+                </div>
+                <div class="col-md-6">
+                  {{ form_row(form.service, {'attr': {'class': 'form-control'}, 'label': 'Prestation demandée'}) }}
+                </div>
+              </div>
+
+              <div class="row g-3 mt-2">
+                <div class="col-md-12">
+                  {{ form_row(form.notes, {'attr': {'class': 'form-control', 'rows': 3}, 'label': 'Notes supplémentaires'}) }}
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-danger">
+                  <i class="fas fa-save"></i> Envoyer la demande
+                </button>
+                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                  <i class="fas fa-times"></i> Annuler
+                </button>
+              </div>
+
+              {{ form_end(form) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de connexion requise -->
+    <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow">
+          <div class="modal-header bg-danger text-dark">
+            <h5 class="modal-title" id="loginRequiredModalLabel" style="color: white;">
+              <i class="fas fa-exclamation-triangle me-2"></i> Connexion requise
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+          </div>
+          <div class="modal-body text-center">
+            Vous devez être connecté pour prendre un rendez-vous.
+          </div>
+          <div class="modal-footer justify-content-center">
+            <a href="{{ path('app_login') }}" class="btn btn-mybtn">
+              <i class="fas fa-sign-in-alt"></i> Se connecter
+            </a>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let form = document.querySelector('#appointmentFormContainer form');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(form);
+
+            fetch("{{ path('appointment_create') }}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); 
+                } else {
+                    alert('Erreur : ' + data.errors);
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        });
+    });
+
+    </script>
+
+{# {% endblock %} #}
+{% endblock %}

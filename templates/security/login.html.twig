@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="w-100" style="max-width: 500px;">
+        <h1 class="mb-4 text-center">Connexion</h1>
+
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                Vous êtes connecté en tant que {{ app.user.userIdentifier }},
+                <a href="{{ path('app_logout') }}"><button class="btn btn-outline-dark ml-2">Déconnexion</button></a>
+            </div>
+        {% else %}
+            <form method="post">
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Email :</label>
+                    <input aria-label="Veuillez écrire votre email" type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                           class="form-control" autocomplete="email" required autofocus>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label">Mot de passe :</label>
+                    <input aria-label="Veuillez écrire votre mot de passe" type="password" name="password" id="inputPassword"
+                           class="form-control" autocomplete="current-password" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="form-check mb-3">
+                    <input aria-label="Cliquer pour rester connecté"  class="form-check-input" type="checkbox" name="_remember_me" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Rester connecté</label>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button aria-label="Se connecter"  class="btn mybtn" type="submit">Se connecter</button>
+                    <a href="{{ path('app_register') }}" class="btn btn-secondary">S'enregistrer</a>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

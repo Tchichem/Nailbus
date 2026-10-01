@@ -1,0 +1,31 @@
+<footer class="text-white text-center text-lg-start mt-5" style="background-color:rgb(255, 143, 176);">
+    <div class="container p-4">
+        <div class="row">
+            <div class="col-lg-6 col-md-12 mb-4">
+                <h5 class="text-uppercase">NAILBUS</h5>
+                <p>🎀 The Pink Nail Bus</p>
+                <p>➳ Nails & Art</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5 class="text-uppercase">Suivez-nous</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white">Instagram</a></li>
+                    <li><a href="#" class="text-white">Tiktok</a></li>
+
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5 class="text-uppercase">Liens utiles</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ path('mentions_legales') }}" class="text-white">Mentions légales</a></li>
+                        <li><a href="{{ path('cgv') }}" class="text-white">Conditions Générales de Vente</a></li>
+                        <li><a href="{{ path('conditions_reservation') }}" class="text-white">Conditions de Réservation</a></li>
+                        <li><a href="{{ path('confidentialite') }}" class="text-white">Politique de confidentialité</a></li>
+                    </ul>
+            </div>
+        </div>
+    </div>
+    <div class="text-center p-3">
+        © {{ "now"|date("Y") }} NAILBUS - Tous droits réservés.
+    </div>
+</footer>

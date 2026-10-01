@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte - Ecommerce{% endblock %}
+
+{% block body %}
+<div class="example-wrapper">
+    <h2>Mon compte</h2>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="border border-dark p-4 h-100">
+                <h2>Infos</h2>
+                <p><strong>Email : </strong> {{ app.user.email }}</p>
+                {% if app.user.is_verified %}
+                    <p>Compte vérifié.</p>
+                {% else %}
+                    <p>
+                        Votre compte n'est pas vérifié.
+                    </p>
+                {% endif %}
+
+                <!-- Changement de mot de passe -->
+                <p><strong>Changer mon mot de passe :</strong>
+    <button class="btn mybtn my-2 my-sm-0" onclick="togglePasswordForm()">Changer</button>
+</p>
+
+<div id="change-password-form" style="display: none; margin: 1rem;">
+    {{ form_start(changePasswordForm) }}
+        {{ form_row(changePasswordForm.current_password) }}
+        {{ form_row(changePasswordForm.new_password) }}
+        {{ form_row(changePasswordForm.confirm_password) }}
+        <button type="submit" class="btn mybtn mt-2">Valider</button>
+        <button type="button" class="btn btn-secondary mt-2 ms-2" onclick="togglePasswordForm(false)">Annuler</button>
+    {{ form_end(changePasswordForm) }}
+</div>
+
+                <!-- Bouton supprimer compte et données -->
+                <div id="delete-confirmation" style="display: none; margin: 4rem;">
+                    <p class="text-danger fw-bold">Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est <u>irréversible</u>.</p>
+                    <form method="post" action="{{ path('account_delete') }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_account') }}">
+                        <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+                        <button type="button" class="btn btn-secondary ms-2" onclick="toggleDeleteForm(false)">Annuler</button>
+                    </form>
+                </div>
+
+                <button class="btn btn-danger" onclick="toggleDeleteForm(true)">Supprimer mon compte</button>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="border border-dark p-4 h-100">
+                <h2>Commandes</h2>
+
+            {% if orders is empty %}
+                <p>Vous n'avez aucune commande passée ou en cours.</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Référence</th>
+                                <th>Date</th>
+                                <th>Prix</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>{{ order.invoice }}</td>
+                                    <td>{{ order.date|date('d/m/Y H:i') }}</td>
+                                    <td>{{ order.price }} €</td>
+                                    <td>{{ order.status }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDeleteForm(show) {
+        document.getElementById('delete-confirmation').style.display = show ? 'block' : 'none';
+    }
+
+    function togglePasswordForm(show = true) {
+        document.getElementById('change-password-form').style.display = show ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

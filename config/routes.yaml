@@ -1,0 +1,25 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+admin_dashboard:
+    path: /admin
+    controller: App\Controller\Admin\DashboardController::index
+
+mentions_legales:
+  path: /mentions-legales
+  controller: App\Controller\LegalController::mentionsLegales
+
+cgv:
+  path: /cgv
+  controller: App\Controller\LegalController::cgv
+
+conditions_reservation:
+  path: /conditions-reservation
+  controller: App\Controller\LegalController::conditionsReservation
+
+confidentialite:
+  path: /confidentialite
+  controller: App\Controller\LegalController::confidentialite

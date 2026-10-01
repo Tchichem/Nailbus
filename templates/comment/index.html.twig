@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis des utilisateurs{% endblock %}
+
+{% block body %}
+<h1>Avis client</h1>
+
+{% for comment in comments %}
+    <div class="card mb-3 p-3">
+        <p><strong>{{ comment.user.firstName ?: comment.user.email }}</strong> le {{ comment.createdAt|date('d/m/Y H:i') }}</p>
+        <p>{{ comment.content }}</p>
+    </div>
+{% else %}
+    <p>Aucun commentaire pour l’instant.</p>
+{% endfor %}
+
+<nav aria-label="Pagination">
+    <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(comments) }}
+    </div>
+</nav>
+
+
+<a href="{{ path('app_comment_new') }}" class="btn mybtn">Écrire un avis</a>
+{% endblock %}

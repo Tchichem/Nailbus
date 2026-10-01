@@ -1,0 +1,23 @@
+<div class="row mt-4">
+    {% for product in pagination %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <img width="200px" height="200px" src="{{ asset('build/images/' ~ product.image) }}" alt="{{ product.name }}">
+                    <h5 class="card-title">{{ product.name|upper }}</h5>
+                    <p class="card-text">{{ product.description|slice(0, 100) }}...</p>
+                    <a href="{{ path('app_catalog_show', { id : product.id }) }}" class="btn mybtn">Voir</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning">Aucun produit trouvé.</div>
+    {% endfor %}
+</div>
+
+<!-- Bloc de pagination -->
+<nav aria-label="Pagination">
+    <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+</nav>

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un avis{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow rounded-4">
+                <div class="card-body p-4">
+                    <h2 class="card-title text-center mb-4">Donnez votre avis</h2>
+
+                    {{ form_start(form) }}
+
+                        <div class="mb-3">
+                            {{ form_label(form.content) }}
+                            {{ form_widget(form.content, {
+                                attr: {'class': 'form-control', 'rows': 5}
+                            }) }}
+                            {{ form_errors(form.content) }}
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn mybtn rounded-pill py-2">
+                                Envoyer mon avis
+                            </button>
+                        </div>
+                        
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

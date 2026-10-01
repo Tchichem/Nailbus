@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">{{ product.name }}</h1>
+
+    <div class="row g-4 align-items-center">
+        <div class="col-md-6 text-center">
+            <img class="img-fluid rounded shadow" style="max-width: 100%; max-height: 400px; object-fit: cover;" src="{{ asset('build/images/' ~ product.image) }}" alt="{{ product.name }}">
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h4 class="card-title text-muted">{{ product.name }}</h4>
+                    <h5 class="card-subtitle mb-3 text-danger">{{ product.price }} €</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="fw-bold">En stock : {{ product.stock }}</p>
+
+                    <form method="post" action="{{ path('app_add_cart', { idProduct : product.id }) }}">
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantité</label>
+                            <select name="quantity" id="quantity" class="form-select w-auto d-inline-block">
+                                {% for i in 1..product.stock %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button class="btn btn-danger w-100" type="submit">Ajouter au panier</button>
+                    </form>
+
+                    <a href="{{ path('app_catalog') }}" class="btn btn-outline-secondary w-100 mt-2">← Retour au catalogue</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

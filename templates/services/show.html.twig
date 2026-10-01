@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ service.name }} - NAILBUS{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">{{ service.name }}</h1>
+
+    <div class="row g-4 align-items-center">
+        <div class="col-md-6 text-center">
+            <img class="img-fluid rounded shadow" style="max-height: 400px; object-fit: cover;" src="{{ asset('build/images/' ~ service.image) }}" alt="{{ service.name }}">
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h4 class="card-title text-muted">{{ service.name }}</h4>
+                    <h5 class="card-subtitle mb-3 text-success">{{ service.price }} € / heure</h5>
+                    <p class="card-text">{{ service.description }}</p>
+
+                    <div class="text-center mt-4">
+                        <a href="/appointments" class="btn mybtn w-100">Prendre rendez-vous</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

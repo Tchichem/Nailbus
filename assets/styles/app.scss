@@ -1,0 +1,49 @@
+@import "~bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Hand+Pre:wght@400..700&family=Inconsolata:wght@200..900&family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
+
+body {
+  background-color: #ffe4ec;
+  color: black;
+  font-family: "Karla", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+// Bouton rose
+.btn.mybtn {
+  background-color: pink !important;
+  color: black !important;
+  border-radius: 0.5rem; 
+  transition: background-color 0.3s ease, color 0.3s ease; 
+  padding: 0.5rem 1.2rem;
+  border: none;
+}
+
+.btn.mybtn:hover {
+  background-color: #fa7aa0 !important;
+  color: white !important;
+}
+
+.btn.mybtn:active {
+  background-color: #E75480 !important;
+  color: white !important;
+}
+
+nav a {
+  background-color: #ffe4ec;
+  transition: all 0.3s ease;
+}
+nav a:hover {
+  color: #ff6600;
+  transform: scale(0.95);
+}
+nav a:active {
+  transform: scale(0.95);
+}
+

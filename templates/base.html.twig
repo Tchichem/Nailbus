@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>{{ 'head.title'|trans }}</title>
+
+		<!-- Meta SEO -->
+		<meta name="description" content="{% block meta_description %}{% endblock %}">
+		<meta name="robots" content="index, follow">
+		<meta name="author" content="{{ 'head.author'|trans }}">
+		<meta name="theme-color" content="{{ 'head.theme_color'|trans }}">
+
+		<!-- Linkedin et facebook -->
+
+		<meta property="og:title" content="{{ 'head.title'|trans }}">
+		<meta property="og:description" content="{{ 'head.description'|trans }}">
+		<meta property="og:image" content="{{ asset('images/logo.webp') }}">
+		<meta property="og:url" content="{{ app.request.uri }}">
+		<meta property="og:type" content="website">
+
+		<!-- twitter -->
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="{{ 'head.title'|trans }}">
+		<meta name="twitter:description" content="{{ 'head.description'|trans }}">
+		<meta name="twitter:image" content="{{ asset('images/logo.webp') }}">
+
+		<!--  Favicon  -->
+		<link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+	
+	{% block stylesheets %}
+		{{ encore_entry_link_tags('app') }}
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	{% endblock %}
+</head>
+<body>
+
+	{% include 'nav.html.twig' %}
+	
+
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">
+			{{ message }}
+		</div>
+	{% endfor %}
+	
+	{% block section %}{% endblock %}
+	
+
+<div class="container pt-2">
+		{% block body %}{% endblock %}
+</div>
+
+	{% include 'footer.html.twig' %}
+
+	{% block javascripts %}
+		{{ encore_entry_script_tags('app') }}
+		<script>
+		function updateCartCount() {
+			fetch('/cart/count')
+				.then(response => response.json())
+				.then(data => {
+					const badge = document.getElementById('cartCount');
+					if (badge) {
+						badge.textContent = data.count;
+					}
+				});
+		}
+
+		document.addEventListener('DOMContentLoaded', updateCartCount);
+		</script>
+
+	{% endblock %}
+
+</body>
+</html>

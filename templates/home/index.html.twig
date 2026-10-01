@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}NAILBUS{% endblock %}
+
+
+{% block section %}
+<div class="container-fluid bg-pink text-white py-5" style="background-color: rgb(255, 143, 176);">
+  <div class="row align-items-center justify-content-center">
+    
+    <div class="col-12 col-md-6 text-center text-md-start px-4">
+      <h1>
+        NAILBUS<br>
+        <small>Le premier Nail Bus de France - Devenez ce que vous voulez être ♡</small>
+      </h1>
+      <p>Onglerie et vente de produits</p>
+
+      <div class="d-flex justify-content-center justify-content-md-start gap-3 flex-wrap">
+        <a href="/appointments">
+          <button title="Prendre un rendez-vous" class="btn btn-outline-light my-2" type="submit">Prendre rendez-vous</button>
+        </a>
+        <a href="/services">
+          <button title="Voir toutes les prestations" class="btn btn-outline-light my-2" type="submit">Voir toutes les prestations</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 text-center mt-4 mt-md-0">
+      <img src="{{ asset('build/images/bus.webp') }}" alt="Image représentant l'intérieur du bus où les prestations ont lieu" class="img-fluid" style="max-height: 400px; object-fit: contain;">
+    </div>
+
+  </div>
+</div>
+
+
+    
+
+{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+<main>
+        <section id="products" class="m-5">
+            <h2 class="mb-4">Derniers produits</h2>
+                <div class="container">
+                    {% if products|length > 0 %}
+                        <div class="row">
+                            {% for product in products %}
+                                <div class="col-md-4 mb-4 ">
+                                    <div class="card h-100">
+                                        <div class="card-body ">
+                                            <img width="200px" height="200px" src="{{ asset('build/images/' ~ product.image) }}" alt="{{ product.name }}">
+                                            <h5 class="card-title">{{ product.name|upper }}</h5>
+                                            <p class="card-text">{{ product.description|slice(0, 100) }}...</p>
+                                            <a href="{{ path('app_catalog_show', { id : product.id }) }}" class="btn mybtn">Voir</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                         <div class="d-flex flex-row-reverse m-4">
+                             <p><a href="/catalog"><button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Voir tous les produits ></button></a></p>
+                        </div>
+                {% else %}
+                    <div class="alert alert-warning">Aucun produit n'est disponible pour le moment.</div>
+                {% endif %}
+            </section>
+
+    <section id="reviews" class="m-5">
+      <h2 class="mb-4">Derniers avis clients</h2>
+                {% if comments|length > 0 %}
+                    <div class="row">
+                        {% for comment in comments %}
+                          <div class="card mb-3 p-3">
+                              <p><strong>{{ comment.user.firstName ?: comment.user.email }}</strong> le {{ comment.createdAt|date('d/m/Y H:i') }}</p>
+                              <p>{{ comment.content }}</p>
+                          </div>
+
+                        {% endfor %}
+                    </div>
+                          <div class="d-flex flex-row-reverse m-4">
+                          <p><a href="/comment"><button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Voir plus d'avis de clients ></button></a></p>
+                          </div>
+                {% else %}
+                    <div class="alert alert-warning">Aucun avis client pour l'instant. <a href="{{ path('app_comment_new') }}" class="btn mybtn">Donner un avis</a>.</div>
+                {% endif %}
+    </section>
+<div id="productModal" class="modal" style="display:none;">
+    <div class="modal-content" id="modalContent"></div>
+</div>
+
+</main>
+
+{% endblock %}
